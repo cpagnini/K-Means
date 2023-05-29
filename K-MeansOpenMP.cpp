@@ -1,8 +1,8 @@
 #include <cmath>
 #include <fstream>
 #include <chrono>
-#include "/content/drive/My Drive/Parallel/K-means/Cluster.h"
-#include "/content/drive/My Drive/Parallel/K-means/Point.h"
+#include "Cluster.h"
+#include "Point.h"
 #include <omp.h>
 #include<vector>
 #include<iterator>
@@ -26,9 +26,9 @@ int main() {
     int num_threads;
     int num_cluster=5;
     int num_iterations= 20;
-    num_threads =2;
+    num_threads =6;
     omp_set_num_threads(num_threads);
-    const string fname ="/content/drive/My Drive/Parallel/K-means/2D_data_100.csv";
+    const string fname = "../K-Means-main/datasets/data_1000.csv";
 
     auto start = std::chrono::system_clock::now();
     
@@ -43,11 +43,22 @@ int main() {
 
     auto end = std::chrono::system_clock::now();
     double duration = chrono::duration_cast<chrono::milliseconds>(end-start).count();
-    cout<<"Total milliseconds: "<< duration<< endl;
-    
+    string output = "Nr Threads: " + std::to_string(num_threads) + " Total milliseconds: " + std::to_string(duration) + "\n";
+    // Open the file in output mode
+    std::ofstream outputFile("Result.txt", std::ios::app);
 
-    return 0;
-}
+    // Check if the file was opened successfully
+    if (outputFile.is_open())
+    {
+        // Write the string to the file
+        outputFile << output;
+
+        // Close the file
+        outputFile.close();
+    }
+
+        return 0;
+    }
 
 vector <Point> initalize_points(string fname){
     //*****************************************************************************************************************
@@ -97,9 +108,12 @@ vector <Cluster> initalize_clusters(int num_cluster,vector<Point> points){
     //FILLS VECTOR OF CLUSTERS RANDOMLY GENERATED
     //*****************************************************************************************************************
     for(int i=0;i<num_cluster; i++){
-        int n = rand() % (int)points.size();
-        Cluster cl (points[n].get_coord_x(), points[n].get_coord_y(), i);
-        clusters.push_back(cl);
+        if(!points.empty()){
+            int n = rand() % (int)points.size();
+            Cluster cl(points[n].get_coord_x(), points[n].get_coord_y(), i);
+            clusters.push_back(cl);
+        }
+        
     }
     return clusters;
 }
@@ -114,33 +128,40 @@ double distance(Point pt, Cluster cl){
 }
 
 //Assign a point to its cluster centroid based on the MIN Euclidian Distance
-void assign_centroid(vector<Point> &points, vector<Cluster> &clusters){
-    //*****************************************************************************************************************
-    //Double loop points and clusters in order to find the MIN distance between those two. It then assign the point to the cluster which is closer.
-    //*****************************************************************************************************************
+void assign_centroid(vector<Point> &points, vector<Cluster> &clusters)
+{
     double min_distance;
-    #pragma omp parallel
-    #pragma omp for
-    for(Point& p: points){
+    int cluster_id;
+
+#pragma omp parallel default(shared) private(min_distance, cluster_id)
+
+    {
+#pragma omp for schedule(static)
+        for (int i = 0; i < points.size(); i++){
+
+        
+        Point &p = points[i];
         Cluster temp_Cluster = clusters[0];
         min_distance = distance(p, temp_Cluster);
-        int cluster_id = 0; //Necessary in case there is not better distance and cluster_id is not updated
-        for(int i = 1;i<clusters.size();i++){
-            double now_distance = distance(p, clusters[i]);
-            if(now_distance<min_distance){
+        cluster_id = 0;
+
+        for (int j = 1; j < clusters.size(); j++)
+        {
+            double now_distance = distance(p, clusters[j]);
+            if (now_distance < min_distance)
+            {
                 min_distance = now_distance;
-                cluster_id = clusters[i].get_cluster_Id();
-                
+                cluster_id = clusters[j].get_cluster_Id();
             }
         }
-        p.set_id_c(cluster_id); //The cluster id identify the position of this cluster in the clusters array
-        #pragma omp crtical
+
+        p.set_id_c(cluster_id);
+    
+#pragma omp critical
         clusters[cluster_id].add_point(p);
     }
-   
+    }
 }
-
-
 
 //Update centroids
 void update_centroids(vector<Cluster> &clusters){
