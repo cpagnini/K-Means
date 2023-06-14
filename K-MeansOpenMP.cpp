@@ -13,7 +13,7 @@
 using namespace std;
 using namespace std::chrono;
 
-void setting_environment();
+
 vector<Point> initalize_points(string fname);
 vector<Cluster> initalize_clusters(int num_cluster,vector<Point> points); 
 double distance(Point pt, Cluster cl);
@@ -22,16 +22,16 @@ void update_centroids(vector<Cluster> &clusters);
 void draw_chart_gnu(vector<Point> &points);
 
 int main() {
-    setting_environment();
-    int num_threads;
-    int num_cluster;
-    cout << "Num of clusters";
-    cin >> num_cluster;
-    //int num_cluster = 5;
+    
+    // int num_threads;
+    // int num_cluster;
+    // cout << "Num of clusters";
+    // cin >> num_cluster;
+    int num_cluster = 5;
     int num_iterations= 20;
-    num_threads =2;
+    int num_threads =6;
     omp_set_num_threads(num_threads);
-    const string fname = "/datasets/data_500000.csv";
+    const string fname = "C:\\Progetti\\K-Means\\datasets\\data_100000.csv";
 
     auto start = std::chrono::system_clock::now();
     
@@ -46,25 +46,7 @@ int main() {
 
     auto end = std::chrono::system_clock::now();
     string output;
-    int cluster_size = clusters.size();
-    // for (int i = 0; i < cluster_size; i++)
-    // {
-    //     double x = clusters[i].get_coord_x();
-    //     double y = clusters[i].get_coord_y();
-    //     output += "cluster points: \n coord x: " + std::to_string(x) + " coord y: " + std::to_string(y) + "\n";
-    // }
-    // // Open the file in output mode
-    // std::ofstream outputFile("Clusters.txt", std::ios::app);
-
-    // // Check if the file was opened successfully
-    // if (outputFile.is_open())
-    // {
-    //     // Write the string to the file
-    //     outputFile << output;
-
-    //     // Close the file
-    //     outputFile.close();
-    // }
+   
 
     output = "";
     double duration = chrono::duration_cast<chrono::milliseconds>(end - start).count();
@@ -84,59 +66,7 @@ int main() {
 
         return 0;
     }
-void setting_environment(){
-        string filename = "config.json";
-        // Read the JSON file
-        std::ifstream jsonFile(filename);
-        if (!jsonFile.is_open())
-        {
-        std::cout << "Error opening JSON file: " << filename << std::endl;
-        return;
-        }
 
-        // Read the JSON data as a string
-        std::stringstream jsonStream;
-        jsonStream << jsonFile.rdbuf();
-        jsonFile.close();
-
-        std::string jsonData = jsonStream.str();
-
-        // Parse the JSON data
-        std::unordered_map<std::string, std::string> jsonMap;
-        size_t startPos = 0;
-        while (startPos < jsonData.length())
-        {
-        size_t keyPos = jsonData.find("\"", startPos);
-        if (keyPos == std::string::npos)
-            break;
-
-        size_t endKeyPos = jsonData.find("\"", keyPos + 1);
-        if (endKeyPos == std::string::npos)
-            break;
-
-        size_t valuePos = jsonData.find("\"", endKeyPos + 1);
-        if (valuePos == std::string::npos)
-            break;
-
-        size_t endValuePos = jsonData.find("\"", valuePos + 1);
-        if (endValuePos == std::string::npos)
-            break;
-
-        std::string key = jsonData.substr(keyPos + 1, endKeyPos - keyPos - 1);
-        std::string value = jsonData.substr(valuePos + 1, endValuePos - valuePos - 1);
-
-        jsonMap[key] = value;
-
-        startPos = endValuePos + 1;
-        }
-
-        // Set environment variables
-        for (const auto &pair : jsonMap)
-        {
-        std::string envVar = pair.first + "=" + pair.second;
-        
-        }
-}
         vector<Point> initalize_points(string fname)
         {
             //*****************************************************************************************************************
@@ -245,7 +175,9 @@ void setting_environment(){
         clusters[cluster_id].add_point(p);
         }
     }
-    
+
+
+
 }
 
 //Update centroids

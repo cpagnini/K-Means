@@ -1,5 +1,6 @@
-
-Nr Threads: 6 Total milliseconds: 10354.000000
-Nr Threads: 4 Total milliseconds: 10377.000000
-Nr Threads: 2 Total milliseconds: 8312.000000
-Nr Threads: 2 Total milliseconds: 8280.000000
+Nr Threads: 2 Total milliseconds: 1884.000000
+Nr Threads: 6 Total milliseconds: 1546.000000
+Nr Threads: 6 Total milliseconds: 2254.000000
+Nr Threads: 6 Total milliseconds: 1430.000000
+SoA ---- Nr Threads: 6 Total milliseconds: 1287.000000
+SoA ---- Nr Threads: 1 Total milliseconds: 1478.000000
