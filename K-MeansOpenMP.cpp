@@ -19,7 +19,6 @@ vector<Cluster> initalize_clusters(int num_cluster,vector<Point> points);
 double distance(Point pt, Cluster cl);
 void assign_centroid(vector<Point> &points, vector<Cluster> &clusters);
 void update_centroids(vector<Cluster> &clusters);
-void draw_chart_gnu(vector<Point> &points);
 
 int main() {
     
