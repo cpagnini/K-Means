@@ -38,4 +38,4 @@ You can provide your own dataset in a CSV file format, where each row represents
 Contributions to this repository are welcome! If you find any issues, have suggestions for improvements, or want to add more parallelization techniques, feel free to open a pull request.
 
 # Acknowledgments
-The implementation of the Meanshift algorithm is inspired by academic papers and existing implementations. We acknowledge the contributions of researchers in the field and the resources available online that have been used to develop this project.
+The implementation of the K-Means algorithm is inspired by academic papers and existing implementations. We acknowledge the contributions of researchers in the field and the resources available online that have been used to develop this project.
