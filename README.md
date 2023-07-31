@@ -13,27 +13,29 @@ This task aim to parrtition n points into k clusters in which each point belongs
 3. For every n $\in$ N, find the distance from the nearest cluster k $\in$ K and assign the point the cluster.
 4. Update the centroid's coordinates and size according with the new points added
 
+# Implementations
+### 1. Sequential Version
+The sequential version of the K-Means algorithm is a popular unsupervised machine learning algorithm used for data clustering and pattern recognition. It aims to partition data points into K clusters, represented by centroids. The main steps include initialization, assignment of data points to the nearest centroid, updating centroids, and iterative clustering until convergence.
 
-## **Implementation**
+### 2. Parallel Version using Array of Structures (AoS)
+The parallel version of the K-Means algorithm using Array of Structures (AoS) is implemented in C++ with the help of OpenMP. This approach uses parallelism to speed up the computation of the clustering process. The points are organized in an array of structures, and multiple threads work on different points simultaneously to achieve parallel processing.
 
-The implementation provided for both sequential and parallel version, has same schemas.
+### 3. Parallel Version using Structure of Arrays (SoA)
+The parallel version of the K-Means algorithm using Structure of Arrays (SoA) is another approach implemented in C++ with OpenMP. In this implementation, data points are organized into separate arrays based on attributes, and each thread works on a specific attribute independently. This can provide better performance in certain scenarios, especially for large datasets and optimized memory access.
 
-### Point.cpp
+## Point and Cluster.h
 
-- Randomly 2D points
-  - coord_x, coord_y, id_c
-- getter and setter methods for both, coordinates and cluster id methods
+### 1. AoS (Array of Structures) Version:
+In the AoS version of K-Means, the data points are represented as a single data structure (usually an array), where each element of the array contains all the attributes (dimensions) of a single data point. In other words, the attributes of a data point are stored together in a contiguous block of memory. For example, in a 2D dataset, the AoS representation would have an array where each element holds both the "x" and "y" coordinates of a data point. This version is intuitive and convenient for accessing individual data points but may suffer from memory access inefficiencies when performing certain calculations.
 
-### Cluster.cpp
+### 2. SoA (Structure of Arrays) Version:
+In the SoA version of K-Means, the data points are represented using multiple arrays, where each array stores the values of a specific attribute (dimension) for all data points. In this organization, the "x" coordinates of all data points are stored in one array, and the "y" coordinates are stored in another array. This means that the attributes of all data points are separated into distinct arrays. The SoA version can improve memory access patterns, especially when performing vectorized operations or parallel computations, but may require additional effort to manage multiple arrays and access individual data points.
 
-- Randomly 2D points
-  - coord_x, coord_y, size, candidate_coord_x and candidate_coord_y in order to manage the accumulation of the points
-  - getter and setter methods
-  - add_point and update_coordinates methods to manage a new point added to the cluster and the computation of a the new centroid respectively
-  
- ## Sequential version
- 
- It starts by randomly generating 2D coordinates for points and clusters. It then loop calling 
- - assign_centroid which assign a point to its cluster based on the MIN Euclidean Disance
- - update_clusters
+# Dataset
+You can provide your own dataset in a CSV file format, where each row represents a data point with its features. The code will read the dataset from the CSV file and perform the clustering accordingly.
 
+# Contributing
+Contributions to this repository are welcome! If you find any issues, have suggestions for improvements, or want to add more parallelization techniques, feel free to open a pull request.
+
+# Acknowledgments
+The implementation of the Meanshift algorithm is inspired by academic papers and existing implementations. We acknowledge the contributions of researchers in the field and the resources available online that have been used to develop this project.
