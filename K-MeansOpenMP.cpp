@@ -22,15 +22,12 @@ void update_centroids(vector<Cluster> &clusters);
 
 int main() {
     
-    // int num_threads;
-    // int num_cluster;
-    // cout << "Num of clusters";
-    // cin >> num_cluster;
+ 
     int num_cluster = 5;
     int num_iterations= 20;
-    int num_threads =6;
+    int num_threads =4;
     omp_set_num_threads(num_threads);
-    const string fname = "C:\\Progetti\\K-Means\\datasets\\data_100000.csv";
+    const string fname = "C:\\Progetti\\K-Means\\datasets\\data_10000.csv";
 
     auto start = std::chrono::system_clock::now();
     
@@ -49,7 +46,7 @@ int main() {
 
     output = "";
     double duration = chrono::duration_cast<chrono::milliseconds>(end - start).count();
-    output = "Nr Threads: " + std::to_string(num_threads) + " Total milliseconds: " + std::to_string(duration) + "\n";
+    output = "AoS - Nr Threads: " + std::to_string(num_threads) + " Total milliseconds: " + std::to_string(duration) + "\n";
     // Open the file in output mode
     std::ofstream outputFile("Result.txt", std::ios::app);
 
@@ -132,8 +129,8 @@ int main() {
         double distance(Point pt, Cluster cl)
         {
 
-            double distance = sqrt(pow(pt.get_coord_x() - cl.get_coord_x(), 2) +
-                                   pow(pt.get_coord_y() - cl.get_coord_y(), 2));
+            double distance = pow(pt.get_coord_x() - cl.get_coord_x(), 2) +
+                                   pow(pt.get_coord_y() - cl.get_coord_y(), 2);
 
             return distance;
         }
@@ -170,7 +167,6 @@ int main() {
 
             p.set_id_c(cluster_id);
     
-#pragma omp critical
         clusters[cluster_id].add_point(p);
         }
     }
@@ -184,6 +180,6 @@ void update_centroids(vector<Cluster> &clusters){
        
         for(int i=0;i<clusters.size();i++){
             clusters[i].update_coords();
+            clusters[i].free_point();
         }
-        
 }

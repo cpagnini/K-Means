@@ -24,9 +24,9 @@ int main()
 {
     int num_clusters = 5;
     int num_iterations = 20;
-    int num_threads = 1;
+    int num_threads = 6;
     omp_set_num_threads(num_threads);
-    const string fname = "C:\\Progetti\\K-Means\\datasets\\data_100000.csv";
+    const string fname = "C:\\Progetti\\K-Means\\datasets\\data_1000000.csv";
 
     auto start = std::chrono::system_clock::now();
 

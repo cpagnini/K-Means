@@ -37,7 +37,7 @@ def centroid_update(points, points_assgn):
 
 def load_data(num_cluster):
     global counter
-    with open('datasets/2D_data_500000.csv') as csv_file:
+    with open('datasets/data_10000.csv') as csv_file:
         data = csv.reader(csv_file)
         x_coord = []
         y_coord = []
@@ -57,7 +57,7 @@ def load_data(num_cluster):
 
 
 iterations = 20
-num_clusters = 3
+num_clusters = 5
 counter = 0
 
 _time = time.time()

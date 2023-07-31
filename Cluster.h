@@ -2,10 +2,11 @@
 #define CLUSTER_H
 #include "Point.h"
 
-
-class Cluster {
+class Cluster
+{
 public:
-    Cluster(double coord_x, double coord_y, int id){
+    Cluster(double coord_x, double coord_y, int id)
+    {
         candidate_coord_x = 0;
         candidate_coord_y = 0;
         size = 0;
@@ -14,7 +15,8 @@ public:
         this->id = id;
     }
 
-    Cluster(){
+    Cluster()
+    {
         candidate_coord_x = 0;
         candidate_coord_y = 0;
         size = 0;
@@ -22,44 +24,51 @@ public:
         this->coord_y = 0;
     }
 
-    void add_point(Point point){
-        #pragma omp atomic
+    void add_point(Point point)
+    {
+#pragma omp atomic
         candidate_coord_x += point.get_coord_x();
-        #pragma omp atomic
+#pragma omp atomic
         candidate_coord_y += point.get_coord_y();
-        #pragma omp atomic
+#pragma omp atomic
 
         size++;
-        
     }
 
-    
-
-    double get_coord_x(){
+    double get_coord_x()
+    {
         return this->coord_x;
     }
 
-    double get_coord_y(){
+    double get_coord_y()
+    {
         return this->coord_y;
     }
 
-    void update_coords(){
-        this->coord_x = candidate_coord_x/this->size;
-        this->coord_y = candidate_coord_y/this->size;
-        free_point(this);
+    void update_coords()
+    {
+        this->coord_x = candidate_coord_x / this->size;
+        this->coord_y = candidate_coord_y / this->size;
         
-
     }
-
-    void set_cluster_Id(int cluster_id){
+    void free_point()
+    {
+        this->size = 0;
+        this->candidate_coord_x = 0;
+        this->candidate_coord_y = 0;
+    }
+    void set_cluster_Id(int cluster_id)
+    {
         this->id = cluster_id;
     }
 
-    int get_cluster_Id(){
+    int get_cluster_Id()
+    {
         return id;
     }
 
-    int get_size(){
+    int get_size()
+    {
         return size;
     }
 
@@ -71,13 +80,7 @@ private:
     int size;
     int id;
 
-    void free_point(Cluster* c){
-        c->size = 0;
-        c->candidate_coord_x = 0;
-        c->candidate_coord_y = 0;
-    }
-
+    
 };
-
 
 #endif
